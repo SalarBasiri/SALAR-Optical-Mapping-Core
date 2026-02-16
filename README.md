@@ -105,6 +105,28 @@ The software is developed in **Delphi 2010**, utilizing native VCL for high-perf
 
 **The hardware section of this system (Smart LED Drivers, Stimulators, and Synchronization Modules) is not currently open-sourced.** The software is designed to interface with high-speed camera systems and synchronized stimulators. I am open to **collaboration, academic cooperation, or commercial inquiries** regarding the full hardware-software stack. If you are interested in the physical implementation or the integrated DAQ system, please feel free to reach out.
 
+## 🔬 Hardware & Acquisition
+
+The **SALAR** suite was developed through two distinct phases of hardware evolution, ensuring the software is robust enough to handle both entry-level high-speed data and scientific-grade imaging.
+
+### 🎥 Supported Imaging Pipelines
+The repository is designed for researchers at the **PHOSITA** level (Person Having Ordinary Skill In The Art) who require high temporal resolution for cardiac electrophysiology.
+
+1. **Phase I: Proof of Concept (High-Speed Consumer)**
+   - Utilized high-speed consumer digital cameras (e.g., Casio Exilim series at 120Hz).
+   - **Software Role:** Our custom **Frame Grabber** (utilizing `TVideograbber`) was essential here to extract and manage frames from standard video containers for raw analysis.
+
+2. **Phase II: Scientific Grade (FLIR Blackfly S)**
+   - **Sensor:** FLIR BLACKFLY® S (P/N: BFS-U3-04S2, USB3 Vision).
+   - **Optimization:** Developed with a custom mechanical stabilization mount and a **TEC (Thermo-Electric Cooling)** system to minimize thermal noise and maximize Quantum Efficiency (QE).
+   - **Acquisition:** While the FLIR utility software handles raw frame capture, the SALAR suite provides the necessary downstream processing to turn that raw data into APD80 and CV maps.
+
+### 🖥️ System Requirements
+To handle the massive data throughput of high-speed cardiac imaging:
+* **Storage:** High-speed SSD (NVMe recommended) for frame-writing.
+* **Processing:** A high-end CPU/RAM configuration to handle 100Hz+ frame-by-frame analysis without bottlenecks.
+* **Stable Environment:** For FLIR Blackfly S setups, active cooling (TEC) is highly recommended for long-duration recording to ensure SNR consistency.
+
 ## 🛠 Installation & Usage
 
 1.  Clone the repository.
