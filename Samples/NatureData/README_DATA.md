@@ -1,1 +1,0 @@
-The frames in this folder are extracted from the supplementary video of DOI: 10.1038/srep43217 for educational and benchmarking purposes only. All rights to the original data belong to the respective authors.
