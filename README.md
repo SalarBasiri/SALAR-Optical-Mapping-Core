@@ -109,17 +109,19 @@ The software is developed in **Delphi 2010**, utilizing native VCL for high-perf
 
 The **SALAR** suite was developed through two distinct phases of hardware evolution, ensuring the software is robust enough to handle both entry-level high-speed data and scientific-grade imaging.
 
+
+
 ### 🎥 Supported Imaging Pipelines
 The repository is designed for researchers at the **PHOSITA** level (Person Having Ordinary Skill In The Art) who require high temporal resolution for cardiac electrophysiology.
 
-1. **Phase I: Proof of Concept (High-Speed Consumer)**
-   - Utilized high-speed consumer digital cameras (e.g., Casio Exilim series at 120Hz).
-   - **Software Role:** Our custom **Frame Grabber** (utilizing `TVideograbber`) was essential here to extract and manage frames from standard video containers for raw analysis.
+1. **Phase I: Proof of Concept (Casio EX-ZR1200)**
+   - Utilized the **Casio EX-ZR1200** for initial development, leveraging its high-speed video capabilities (up to 120Hz at HD and higher at lower resolutions).
+   - **Software Role:** Our custom **Video-to-Frame Converter** includes pre-set template rules for frame rate and resolution specific to the ZR1200, ensuring seamless extraction of raw data from the camera's AVI/MP4 output.
 
 2. **Phase II: Scientific Grade (FLIR Blackfly S)**
    - **Sensor:** FLIR BLACKFLY® S (P/N: BFS-U3-04S2, USB3 Vision).
-   - **Optimization:** Developed with a custom mechanical stabilization mount and a **TEC (Thermo-Electric Cooling)** system to minimize thermal noise and maximize Quantum Efficiency (QE).
-   - **Acquisition:** While the FLIR utility software handles raw frame capture, the SALAR suite provides the necessary downstream processing to turn that raw data into APD80 and CV maps.
+   - **Optimization:** Improved Quantum Efficiency and SNR via a custom mechanical stabilization mount and a **TEC (Thermo-Electric Cooling)** system.
+   - **Acquisition:** Data captured via USB3 Vision standards is processed through the SALAR Core for high-fidelity APD and CV mapping.
 
 ### 🖥️ System Requirements
 To handle the massive data throughput of high-speed cardiac imaging:
