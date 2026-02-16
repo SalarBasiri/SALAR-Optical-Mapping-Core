@@ -1,0 +1,202 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ExtDlgs;
+
+type
+  TForm1 = class(TForm)
+    ListBox1: TListBox;
+    Image1: TImage;
+    Button1: TButton;
+    Label1: TLabel;
+    Edit1: TEdit;
+    Timer1: TTimer;
+    Button2: TButton;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Button3: TButton;
+    OpenPictureDialog1: TOpenPictureDialog;
+    Edit2: TEdit;
+    Label6: TLabel;
+    procedure Button1Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ListBox1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+    s,s1,s2,s3 : string;
+  in_path , out_path , folder_path: string;
+  c1,c2,c3 : integer;
+  scale : real;
+  intensity : real;
+  l : integer;
+  r,g,b : byte;
+
+  frame_index , max_frame_count : word;
+  i , j : integer;
+   cv : int64;
+
+   xc1,xc2,yc1,yc2 : integer;
+
+   path_counter : integer;
+    dt : double;
+    
+implementation
+
+{$R *.dfm}
+
+
+function CountFilesInFolder ( path: string ): integer;
+var
+  tsr: TSearchRec;
+begin
+  path := IncludeTrailingPathDelimiter ( path );
+  result := 0;
+  if FindFirst ( path + '*.*', faAnyFile and not faDirectory, tsr ) = 0 then begin
+    repeat
+      inc ( result );
+    until FindNext ( tsr ) <> 0;
+    FindClose ( tsr );
+  end;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+timer1.Interval := strtoint(edit1.Text);
+path_counter := 0;
+frame_index := 1;
+in_path := listbox1.Items[path_counter];
+max_frame_count := CountFilesInFolder(in_path) - 5;
+label5.Caption := ' of ' +inttostr(max_frame_count);
+listbox1.Selected[path_counter] := true;
+timer1.Enabled := true;
+dt := strtofloat(edit2.Text);
+end;
+
+procedure TForm1.Timer1Timer(Sender: TObject);
+begin
+s := in_path + 'f'+inttostr(frame_index)+'.bmp';
+label2.Caption := s;
+image1.Picture.LoadFromFile(s);
+{
+out_path := in_path + 'gray_scale\f'+inttostr(frame_index)+'.bmp';
+label3.Caption := out_path;
+for j := 0 to 160 do
+begin
+  for i := 0 to 224 do
+  begin
+
+
+       cv := image1.Canvas.Pixels[i,j];
+       r := getrvalue(cv);
+       g := getgvalue(cv);
+       b := getbvalue(cv);
+
+
+       intensity := g * scale;
+
+       if intensity > 255 then intensity := 255;
+    image2.Canvas.Pixels[i,j] :=  rgb(0,trunc(intensity),0);
+
+  end;
+end;
+
+image2.Picture.SaveToFile(out_path);
+                                     }
+frame_index :=  frame_index + 1;
+
+label3.Caption := 'Frame No: ' + inttostr(frame_index);
+label4.Caption := 'Time : ' +floattostr(trunc(frame_index * dt)) + ' ms';
+
+if frame_index > max_frame_count then
+begin
+path_counter := path_counter + 1;
+
+if  path_counter < listbox1.Items.Count then
+begin
+frame_index := 0;
+in_path := listbox1.Items[path_counter] ;
+max_frame_count := CountFilesInFolder(in_path) - 5;
+label5.Caption := ' of ' +inttostr(max_frame_count);
+listbox1.Selected[path_counter] := true;
+end
+else
+begin
+ timer1.Enabled := false;
+end;
+
+
+end;
+
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+if button2.Caption = 'Pause' then
+begin
+timer1.Enabled := false;
+timer1.Interval := strtoint(edit1.Text);
+button2.Caption := 'Resume';
+
+end
+else
+begin
+timer1.Enabled := true;
+timer1.Interval := strtoint(edit1.Text);
+button2.Caption := 'Pause';
+
+
+end;
+end;
+
+procedure TForm1.ListBox1Click(Sender: TObject);
+begin
+path_counter := listbox1.ItemIndex;
+frame_index := 1;
+in_path := listbox1.Items[path_counter] ;
+max_frame_count := CountFilesInFolder(in_path) - 1;
+label3.Caption := 'Frame No: ' + inttostr(frame_index);
+label5.Caption := ' of ' +inttostr(max_frame_count);
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+if openpicturedialog1.Execute then
+begin
+s1 := openpicturedialog1.FileName;
+  image1.Picture.LoadFromFile(s1);
+  label3.Caption := s1;
+   l := length(s1);
+   c2 := l;
+   
+   repeat
+    c2 := c2 - 1;
+   until (s1[c2] = '\');
+
+   c1 := 1;
+   s2:='';
+   repeat
+     s2 := s2 + s1[c1];
+     c1 := c1 + 1;
+
+   until (c1 > c2);
+
+  listbox1.Items.Add(s2);
+
+end;
+
+end;
+
+end.
